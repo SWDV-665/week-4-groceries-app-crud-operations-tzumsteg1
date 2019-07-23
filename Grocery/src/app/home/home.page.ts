@@ -3,6 +3,8 @@ import { AlertController } from 'ionic-angular';
 import { NavController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { GroceriesServiceService } from '../groceries-service.service';
+import { InputDialogServiceService } from '../input-dialog-service.service';
+
 
 
 @Component({
@@ -14,7 +16,7 @@ export class HomePage {
 
   title = "Grocery List";
 
-  constructor(public toastCtrl: ToastController, public alertCtrl: AlertController, public dataService: GroceriesServiceService) {
+  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public alertCtrl: AlertController, public dataService: GroceriesServiceService, public inputDialogService: InputDialogServiceService) {
 
   }
   loadItems(){
@@ -39,78 +41,12 @@ export class HomePage {
       duration: 3000
     })
     toast.present();
-    this.showEditItemPrompt(item, index);
+    this.inputDialogService.showPrompt(item, index);
   }
 
   addItem(){
     console.log("Adding Item");
+    this.inputDialogService.showPrompt();
 
-  }
-  showAddItemPrompt(){
-    const promp = this.alertCtrl.create({
-      title: "Add Item",
-      message: "Please enter your item.",
-      inputs: [
-        {
-        name: 'name',
-        placeholder: 'Name'
-        },
-        {
-          name: 'quantity',
-          placeholder: 'Quantity'
-          },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Save',
-          handler: item=> {
-            console.log('Saved clicked', item);
-            this.dataService.addItem(item);
-          }
-        }
-      ]
-    });
-    prompt.present();
-  }
-
-  showEditItemPrompt(item, index){
-    const promp = this.alertCtrl.create({
-      title: "Edit Item",
-      message: "Please edit item.",
-      inputs: [
-        {
-        name: 'name',
-        placeholder: 'Name',
-        value: item.name
-        },
-        {
-          name: 'quantity',
-          placeholder: 'Quantity'
-          value: item.quantity
-          },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: data => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Save',
-          handler: item=> {
-            console.log('Saved clicked', item);
-            this.dataService.editItem(item, index);
-          }
-        }
-      ]
-    });
-    prompt.present();
-  }
+  } 
 }
